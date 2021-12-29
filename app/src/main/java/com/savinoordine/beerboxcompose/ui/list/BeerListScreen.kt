@@ -14,6 +14,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,14 +64,24 @@ fun BeerItemCell(beer: BeerLight) {
                 contentDescription = null
             )
             Column(
-                modifier = Modifier.padding(
-                    start = 8.dp,
-                )
-            ) {
+                modifier = Modifier
+                    .padding(
+                        start = 8.dp,
+                    )
+                    .height(88.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.Start,
+
+                ) {
                 Text(text = beer.name)
-                Text(text = beer.tagline)
                 Text(
-                    color = Color.DarkGray,
+                    text = beer.tagline,
+                    fontStyle = FontStyle.Italic,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                )
+                Text(
+                    color = Color.Blue,
                     text = "More info"
                 )//stringResource(R.string))
             }
@@ -84,7 +96,11 @@ fun BeerItemCell(beer: BeerLight) {
 fun DefaultPreview() {
     BeerItemCell(
         BeerLight(
-            0, "Peroni", "Buonissima", "bevila in compagnia", ""
+            0,
+            "Peroni",
+            "Buonissima Buonissima Buonissima Buonissima Buonissima Buonissima Buonissima Buonissima Buonissima",
+            "bevila in compagnia",
+            ""
         )
     )
 }
