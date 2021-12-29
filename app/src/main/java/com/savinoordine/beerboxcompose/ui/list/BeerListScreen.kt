@@ -2,7 +2,6 @@ package com.savinoordine.beerboxcompose.ui.list
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,11 +18,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.savinoordine.beerboxcompose.domain.BeerLight
+import com.savinoordine.beerboxcompose.ui.MainActivity
 
 @Composable
-fun BeerListScreen(viewModel: BeerListViewModel = hiltViewModel()) {
+fun BeerListScreen(
+    viewModel: BeerListViewModel = hiltViewModel(),
+    navController: NavController
+) {
     val beers = viewModel.state.observeAsState(initial = emptyList()).value
 
     LazyColumn(
@@ -32,28 +36,27 @@ fun BeerListScreen(viewModel: BeerListViewModel = hiltViewModel()) {
             .padding(8.dp)
     ) {
         items(beers) { beer ->
-            BeerItemCell(beer)
+            BeerItemCell(beer) {
+                navController.navigate("${MainActivity.BEER_DETAIL_ROUTE}/${beer.id}")
+            }
         }
     }
 }
 
 @Composable
-fun BeerItemCell(beer: BeerLight) {
+fun BeerItemCell(beer: BeerLight, onBeerClicked: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(4.dp)
             .clickable {
-
+                onBeerClicked(beer.id)
             },
         elevation = 4.dp,
     ) {
         Log.d(">>>", beer.imageUrl)
-        Row(horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.clickable {
-
-            }) {
+        Row(horizontalArrangement = Arrangement.Start) {
             Image(
                 painter = rememberImagePainter(data = beer.imageUrl),
                 modifier = Modifier
@@ -102,5 +105,7 @@ fun DefaultPreview() {
             "bevila in compagnia",
             ""
         )
-    )
+    ) {
+        // np
+    }
 }
