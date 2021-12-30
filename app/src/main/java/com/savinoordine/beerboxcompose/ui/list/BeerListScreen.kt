@@ -1,6 +1,5 @@
 package com.savinoordine.beerboxcompose.ui.list
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.savinoordine.beerboxcompose.domain.BeerLight
-import com.savinoordine.beerboxcompose.ui.MainActivity
+import com.savinoordine.beerboxcompose.navigation.BEER_DETAIL_ROUTE
 
 @Composable
 fun BeerListScreen(
@@ -37,7 +36,7 @@ fun BeerListScreen(
     ) {
         items(beers) { beer ->
             BeerItemCell(beer) {
-                navController.navigate("${MainActivity.BEER_DETAIL_ROUTE}/${beer.id}")
+                navController.navigate("${BEER_DETAIL_ROUTE}/${beer.id}")
             }
         }
     }
@@ -55,7 +54,7 @@ fun BeerItemCell(beer: BeerLight, onBeerClicked: (Int) -> Unit) {
             },
         elevation = 4.dp,
     ) {
-        Log.d(">>>", beer.imageUrl)
+
         Row(horizontalArrangement = Arrangement.Start) {
             Image(
                 painter = rememberImagePainter(data = beer.imageUrl),
