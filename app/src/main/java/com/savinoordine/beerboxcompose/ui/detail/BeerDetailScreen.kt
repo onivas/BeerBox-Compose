@@ -2,13 +2,14 @@ package com.savinoordine.beerboxcompose.ui.detail
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -20,24 +21,40 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 
+@ExperimentalMaterialApi
 @Composable
 fun BeerDetailScreen(viewModel: BeerDetailViewModel = hiltViewModel()) {
+    val scaffoldState = rememberBottomSheetScaffoldState()
     val beer = viewModel.state.observeAsState().value
 
-    Scaffold(
+    BottomSheetScaffold(
         modifier = Modifier
-            .fillMaxWidth()
-            .requiredHeightIn(
-                min = 250.dp, max = 500.dp
-            )
-    ) {
-        beer?.let { value ->
-            Row(modifier = Modifier.fillMaxWidth()) {
+            .fillMaxWidth(),
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 80.dp,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {  //content inside the bottom sheet
+            Column(
+                modifier = Modifier
+                    .height(300.dp)
+                    .fillMaxWidth()
+                    .background(
+                        color = Color.Yellow,
+                        shape = MaterialTheme.shapes.large,
+                    )
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 Image(
-                    modifier = Modifier.height(150.dp),
-                    painter = rememberImagePainter(data = value.imageUrl),
+                    painter = rememberImagePainter(data = beer?.imageUrl),
                     contentDescription = null
                 )
+            }
+        }
+    ) { // main content of the view
+        beer?.let { value ->
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -78,7 +95,7 @@ fun BeerDetailScreen(viewModel: BeerDetailViewModel = hiltViewModel()) {
     }
 }
 
-
+@ExperimentalMaterialApi
 @Preview
 @Composable
 fun DetailPreview() {
