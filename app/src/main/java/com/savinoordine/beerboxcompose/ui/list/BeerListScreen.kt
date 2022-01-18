@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.savinoordine.beerboxcompose.domain.BeerLight
 import com.savinoordine.beerboxcompose.navigation.BEER_DETAIL_ROUTE
+import com.savinoordine.beerboxcompose.ui.common.LinearLoader
 
 @Composable
 fun BeerListScreen(
@@ -29,14 +30,19 @@ fun BeerListScreen(
 ) {
     val beers = viewModel.state.observeAsState(initial = emptyList()).value
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        items(beers) { beer ->
-            BeerItemCell(beer) {
-                navController.navigate("${BEER_DETAIL_ROUTE}/${beer.id}")
+    when (beers.size) {
+        0 -> LinearLoader()
+        else -> {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                items(beers) { beer ->
+                    BeerItemCell(beer) {
+                        navController.navigate("${BEER_DETAIL_ROUTE}/${beer.id}")
+                    }
+                }
             }
         }
     }

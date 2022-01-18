@@ -3,6 +3,7 @@ package com.savinoordine.beerboxcompose.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
@@ -12,6 +13,7 @@ import com.savinoordine.beerboxcompose.navigation.mainGraph
 import com.savinoordine.beerboxcompose.ui.theme.BeerBoxComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@ExperimentalMaterialApi
 @Composable
 fun BeerBoxApp() {
     val navController = rememberNavController()
@@ -37,6 +40,7 @@ fun BeerBoxApp() {
     }
 }
 
+@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {

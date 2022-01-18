@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.savinoordine.beerboxcompose.domain.Beer
+import com.savinoordine.beerboxcompose.ui.common.LinearLoader
 
 @ExperimentalMaterialApi
 @Composable
@@ -34,64 +36,64 @@ fun BeerDetailScreen(viewModel: BeerDetailViewModel = hiltViewModel()) {
         sheetPeekHeight = 80.dp,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {  //content inside the bottom sheet
-            Column(
-                modifier = Modifier
-                    .height(300.dp)
-                    .fillMaxWidth()
-                    .background(
-                        color = Color.Yellow,
-                        shape = MaterialTheme.shapes.large,
-                    )
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painter = rememberImagePainter(data = beer?.imageUrl),
-                    contentDescription = null
-                )
-            }
+            BottomSheetView(beer)
         }
     ) { // main content of the view
-        beer?.let { value ->
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = value.name,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = value.tagline,
-                        textAlign = TextAlign.Center,
-                        fontStyle = FontStyle.Italic,
-                        fontSize = 12.sp
-                    )
-                    Text(
-                        text = value.description,
-                        fontSize = 15.sp,
-                        color = Color.Blue,
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .border(
-                                border = BorderStroke(width = 2.dp, color = Color.Blue),
-                                shape = RectangleShape
-                            )
-                            .padding(8.dp)
-                    )
-                }
+        beer?.let { value -> DetailBeerView(value) }
+            ?: run { LinearLoader() }
+    }
+}
 
-            }
-
-        } ?: run {
-            LinearProgressIndicator(
+@Composable
+fun DetailBeerView(value: Beer) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = value.name,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = value.tagline,
+                textAlign = TextAlign.Center,
+                fontStyle = FontStyle.Italic,
+                fontSize = 12.sp
+            )
+            Text(
+                text = value.description,
+                fontSize = 15.sp,
+                color = Color.Blue,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(3.dp),
-                color = Color.Red
+                    .padding(4.dp)
+                    .border(
+                        border = BorderStroke(width = 2.dp, color = Color.Blue),
+                        shape = RectangleShape
+                    )
+                    .padding(8.dp)
             )
         }
+    }
+}
+
+@Composable
+fun BottomSheetView(beer: Beer?) {
+    Column(
+        modifier = Modifier
+            .height(300.dp)
+            .fillMaxWidth()
+            .background(
+                color = Color.Yellow,
+                shape = MaterialTheme.shapes.large,
+            )
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = rememberImagePainter(data = beer?.imageUrl),
+            contentDescription = null
+        )
     }
 }
 
