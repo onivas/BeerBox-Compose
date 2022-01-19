@@ -12,11 +12,16 @@ import javax.inject.Inject
 @HiltViewModel
 class BeerListViewModel
 @Inject
-constructor(beerRepository: BeerRepository) : ViewModel() {
-
+constructor(val beerRepository: BeerRepository) : ViewModel() {
     val state: LiveData<List<BeerLight>> = beerRepository.beers
 
     init {
+        viewModelScope.launch {
+            beerRepository.getBeers()
+        }
+    }
+
+    fun loadMore() {
         viewModelScope.launch {
             beerRepository.getBeers()
         }
